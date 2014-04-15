@@ -30,7 +30,7 @@ void chatterCallback(const sensor_msgs::PointCloud2::ConstPtr msg)
         myIterator != pcl_cloud.end();
         myIterator++)
     {
-     	if(myIterator->x < minX && myIterator->x > 0)
+     	if(myIterator->z < minZ && myIterator->z > 0)
 	{
 	   minX = myIterator->x;
 	   minY = myIterator->y;
