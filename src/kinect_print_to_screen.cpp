@@ -35,6 +35,7 @@ void chatterCallback(const sensor_msgs::PointCloud2::ConstPtr msg)
 	   minX = myIterator->x;
 	   minY = myIterator->y;
 	   minZ = myIterator->z;
+	}
 	//std::cout<<*myIterator<<" "<< std::endl;
     }
 
@@ -51,7 +52,6 @@ void chatterCallback(const sensor_msgs::PointCloud2::ConstPtr msg)
   {
     ROS_ERROR("Failed to convert a message to a pcl type, dropping observation: %s", ex.what());
     return;
-  }
 }
 
 int main(int argc, char **argv)
