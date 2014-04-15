@@ -93,14 +93,14 @@ catkin_package(
     #INCLUDE_DIRS
     #    include
     #    ${PCL_INCLUDE_DIRS}
-    CATKIN_DEPENDS
-        pcl_ros
-        roscpp
-        sensor_msgs
-        std_msgs
-        tf
-    DEPENDS
-        PCL
+    #CATKIN_DEPENDS
+    #    pcl_ros
+    #    roscpp
+    #    sensor_msgs
+    #    std_msgs
+    #    tf
+    #DEPENDS
+    #    PCL
 )
 
 ###########
@@ -132,6 +132,10 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 add_executable(kinect_print_to_screen src/kinect_print_to_screen.cpp)
 target_link_libraries(kinect_print_to_screen ${catkin_LIBRARIES} ${PCL_LIBRARIES})
 add_dependencies(kinect_print_to_screen lab2_generate_messages_cpp)
+
+add_executable(listener src/listener.cpp)
+target_link_libraries(listener ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+
 
 #############
 ## Install ##

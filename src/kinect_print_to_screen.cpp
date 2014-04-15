@@ -6,8 +6,9 @@
 #include <pcl/conversions.h>
 #include <pcl/PCLPointCloud2.h>
 #include <cstdio>
-
 #include <pcl_conversions/pcl_conversions.h>
+#include <tf/transform_broadcaster.h>
+
 
 void chatterCallback(const sensor_msgs::PointCloud2::ConstPtr msg)
 {
@@ -22,14 +23,29 @@ void chatterCallback(const sensor_msgs::PointCloud2::ConstPtr msg)
     pcl::fromPCLPointCloud2(pcl_pc2, pcl_cloud);
    
     pcl::PointCloud < pcl::PointXYZ >::iterator myIterator;
+    float minX = 10000;
+    float minY = 10000;
+    float minZ = 10000;
     for(myIterator = pcl_cloud.begin();  
         myIterator != pcl_cloud.end();
         myIterator++)
     {
-        std::cout<<*myIterator<<" ";
+     	if(myIterator->x < minX && myIterator->x > 0)
+	{
+	   minX = myIterator->x;
+	   minY = myIterator->y;
+	   minZ = myIterator->z;
+	//std::cout<<*myIterator<<" "<< std::endl;
     }
 
-
+    std::cout <<minX<<", "<<minY<<", "<<minZ<< std::endl;
+    
+    static tf::TransformBroadcaster br;
+    tf::Transform transform;
+    transform.setOrigin( tf::Vector3(minX, minY, minZ) );
+    transform.setRotation(tf::Quaternion(0, 0, 1));
+    br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "/nav_kinect_depth_optical_frame", "/point_num"));
+    } 
   }
   catch (pcl::PCLException& ex)
   {
@@ -42,8 +58,8 @@ int main(int argc, char **argv)
 {
   ros::init(argc, argv, "listener");
   ros::NodeHandle n;
-  //ros::Subscriber sub = n.subscribe("/camera/depth/points", 1000, chatterCallback);
-  ros::Subscriber sub = n.subscribe("/nav_kinect/depth/points", 1000, chatterCallback);
+  ros::Subscriber sub = n.subscribe("/camera/depth/points", 1000, chatterCallback);
+  //ros::Subscriber sub = n.subscribe("/nav_kinect/depth/points", 1000, chatterCallback);
   ros::spin();
   return 0;
 }
