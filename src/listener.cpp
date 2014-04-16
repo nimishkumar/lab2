@@ -24,11 +24,13 @@ int main(int argc, char** argv){
     }
 
     geometry_msgs::Twist vel_msg;
-    vel_msg.angular.z = 4 * atan2(transform.getOrigin().y(),
-                                 transform.getOrigin().x());
-    vel_msg.linear.x = 0.5 * sqrt(pow(transform.getOrigin().x(), 2) +
-                                  pow(transform.getOrigin().y(), 2));
+    if(transform.getOrigin().z()<0.75)
+      vel_msg.linear.x = 0.0;
+    else
+      vel_msg.linear.x = 0.2 * sqrt(pow(transform.getOrigin().x(), 2) + pow(transform.getOrigin().y(), 2));
 
+    vel_msg.angular.z = 0.2 * atan2(transform.getOrigin().y(), transform.getOrigin().x());
+    
     point_vel.publish(vel_msg);
 
     rate.sleep();
